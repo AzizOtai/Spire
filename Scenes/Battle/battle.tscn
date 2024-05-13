@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://xhpnil8aupaw"]
+[gd_scene load_steps=17 format=3 uid="uid://xhpnil8aupaw"]
 
 [ext_resource type="Texture2D" uid="uid://cp4iq5fd6j8be" path="res://art/background.png" id="1_7brtg"]
 [ext_resource type="Script" path="res://Scenes/Battle/battle.gd" id="1_td51v"]
@@ -6,13 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://0mikleev3aw2" path="res://Scenes/enemy/enemy.tscn" id="2_vj4s1"]
 [ext_resource type="PackedScene" uid="uid://daomya4wk2gth" path="res://Scenes/player/player.tscn" id="3_1s7l1"]
 [ext_resource type="PackedScene" uid="uid://dox00d5dsf1ec" path="res://Scenes/card_target_selector/card_target_selector.tscn" id="3_2awon"]
-[ext_resource type="Resource" uid="uid://lida2epu0rox" path="res://enemies/crab/test_enemy.tres" id="3_ored6"]
 [ext_resource type="Resource" uid="uid://bc7rph4m7ummg" path="res://characters/warrior/cards/warrior.tres" id="4_lqjsk"]
+[ext_resource type="Script" path="res://Scenes/enemy/enemy_handler.gd" id="4_m7yk7"]
+[ext_resource type="Resource" uid="uid://dqj5wfnjvqopm" path="res://enemies/crab/crab_enemy.tres" id="5_3ls34"]
 [ext_resource type="Script" path="res://Scenes/ui/battle_ui.gd" id="7_8hjbg"]
 [ext_resource type="Script" path="res://Scenes/player/player_handler.gd" id="8_0m1qs"]
 [ext_resource type="PackedScene" uid="uid://gd4ct7ukjeoj" path="res://Scenes/ui/mana_ui.tscn" id="11_234u8"]
 [ext_resource type="PackedScene" uid="uid://clmy602a00r5a" path="res://Scenes/ui/tool_tip.tscn" id="12_iw8wv"]
 [ext_resource type="Theme" uid="uid://3bq8t3e6yn64" path="res://Main_theme.tres" id="13_nqik4"]
+[ext_resource type="Script" path="res://Scenes/ui/red_flash.gd" id="15_g82kn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kgirb"]
 size = Vector2(256, 100)
@@ -36,9 +38,12 @@ position = Vector2(128, 50)
 shape = SubResource("RectangleShape2D_kgirb")
 debug_color = Color(1.68458e-07, 0.217607, 0.259226, 0.42)
 
-[node name="enemy" parent="." instance=ExtResource("2_vj4s1")]
+[node name="EnemyHandler" type="Node2D" parent="."]
+script = ExtResource("4_m7yk7")
+
+[node name="enemy" parent="EnemyHandler" instance=ExtResource("2_vj4s1")]
 position = Vector2(205, 80)
-stats = ExtResource("3_ored6")
+stats = ExtResource("5_3ls34")
 
 [node name="Player" parent="." instance=ExtResource("3_1s7l1")]
 position = Vector2(54, 80)
@@ -89,3 +94,22 @@ grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("13_nqik4")
 text = "End Turn"
+
+[node name="RedFlash" type="CanvasLayer" parent="."]
+layer = 2
+script = ExtResource("15_g82kn")
+
+[node name="ColorRect" type="ColorRect" parent="RedFlash"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.443137, 0.443137, 0)
+
+[node name="Timer" type="Timer" parent="RedFlash"]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="child_order_changed" from="EnemyHandler" to="." method="_on_enemy_handler_child_order_changed"]
