@@ -18,6 +18,8 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 
 Events="*res://global/events.gd"
 Shaker="*res://global/shaker.gd"
+MasicPlayer="*res://global/masic_player.tscn"
+SFXPlayer="*res://global/sfx_player.tscn"
 
 [display]
 
